@@ -186,7 +186,7 @@ export default function Header() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed top-0 left-0 right-0 bg-white shadow-2xl z-40 md:hidden overflow-hidden"
+                        className="fixed top-0 left-0 right-0 bg-white shadow-2xl z-100000 md:hidden overflow-hidden"
                         style={{ top: `${headerHeight}px` }}
                     >
                         <Container className="py-6">
