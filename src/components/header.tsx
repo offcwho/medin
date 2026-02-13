@@ -140,25 +140,27 @@ export default function Header() {
                             </motion.li>
                         ))}
                     </nav>
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="md:hidden flex flex-col gap-1.5 p-2"
-                        aria-label="Меню"
-                    >
-                        <motion.span
-                            animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-                            className="block w-6 h-0.5 bg-[#B72B3A]"
-                        />
-                        <motion.span
-                            animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                            className="block w-6 h-0.5 bg-[#B72B3A]"
-                        />
-                        <motion.span
-                            animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-                            className="block w-6 h-0.5 bg-[#B72B3A]"
-                        />
-                    </motion.button>
+                    <div className="md:hidden flex">
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden flex flex-col gap-1.5 p-2"
+                            aria-label="Меню"
+                        >
+                            <motion.span
+                                animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                                className="block w-6 h-0.5 bg-[#B72B3A]"
+                            />
+                            <motion.span
+                                animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                                className="block w-6 h-0.5 bg-[#B72B3A]"
+                            />
+                            <motion.span
+                                animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                                className="block w-6 h-0.5 bg-[#B72B3A]"
+                            />
+                        </motion.button>
+                    </div>
 
                     <Button
                         transition={{ delay: isMounted ? 0.6 : 0 }}
