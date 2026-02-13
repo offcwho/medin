@@ -11,26 +11,6 @@ export default function Welcome() {
 
     return (
         <div className="bg-[#FFF0EC] relative z-10000">
-            {/* Фоновые декоративные элементы */}
-            <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.1 }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-                className="absolute top-10 left-5 w-80 h-80 rounded-full bg-linear-to-r from-[#B72B3A]/90 to-[#FF6B6B]/90 blur-3xl"
-            />
-            <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.08 }}
-                transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-                className="absolute top-40 right-10 w-60 h-60 rounded-full bg-linear-to-l from-[#B72B3A]/90 to-[#FF6B6B]/90 blur-3xl"
-            />
-            <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.12 }}
-                transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
-                className="absolute bottom-20 left-1/4 w-96 h-96 rounded-full bg-linear-to-b from-[#B72B3A]/90 to-transparent blur-3xl"
-            />
-
             <Container>
                 <div className="flex flex-col w-full py-8 md:py-16 relative z-10">
                     {/* Анимированная обводка заголовка */}
