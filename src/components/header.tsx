@@ -140,40 +140,41 @@ export default function Header() {
                             </motion.li>
                         ))}
                     </nav>
-                    <div className="md:hidden flex">
-                        <motion.button
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden flex flex-col gap-1.5 p-2"
-                            aria-label="Меню"
-                        >
-                            <motion.span
-                                animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
-                                className="block w-6 h-0.5 bg-[#B72B3A]"
-                            />
-                            <motion.span
-                                animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                                className="block w-6 h-0.5 bg-[#B72B3A]"
-                            />
-                            <motion.span
-                                animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
-                                className="block w-6 h-0.5 bg-[#B72B3A]"
-                            />
-                        </motion.button>
-                    </div>
-
-                    <Button
-                        transition={{ delay: isMounted ? 0.6 : 0 }}
-                        onClick={() => openModal('send-application')}
-                        whileHover={{
-                            scale: 1,
-                            boxShadow: "0 10px 25px -5px rgba(183, 43, 58, 0.3)"
-                        }}
-                        whileTap={{ scale: 0.50 }}
-                        className="relative overflow-hidden group hidden md:block"
+                    <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="md:hidden flex flex-col gap-1.5 p-2"
+                        aria-label="Меню"
                     >
-                        Оставить заявку
-                    </Button>
+                        <motion.span
+                            animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                            className="block w-6 h-0.5 bg-[#B72B3A]"
+                        />
+                        <motion.span
+                            animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                            className="block w-6 h-0.5 bg-[#B72B3A]"
+                        />
+                        <motion.span
+                            animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                            className="block w-6 h-0.5 bg-[#B72B3A]"
+                        />
+                    </motion.button>
+
+
+                    <div className="hidden md:block">
+                        <Button
+                            transition={{ delay: isMounted ? 0.6 : 0 }}
+                            onClick={() => openModal('send-application')}
+                            whileHover={{
+                                scale: 1,
+                                boxShadow: "0 10px 25px -5px rgba(183, 43, 58, 0.3)"
+                            }}
+                            whileTap={{ scale: 0.50 }}
+                            className="relative overflow-hidden group"
+                        >
+                            Оставить заявку
+                        </Button>
+                    </div>
                 </Container>
             </motion.header>
 
