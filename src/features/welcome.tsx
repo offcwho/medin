@@ -86,7 +86,7 @@ export default function Welcome() {
                         </Button>
 
                         <Button
-                            className="bg-white! md:rounded-tl-none text-gray-700! shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group min-w-50"
+                            className="md:rounded-tl-none shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group min-w-50"
                             onClick={() => router.push('/partners')}
                         >
                             Перейти к партнерам
