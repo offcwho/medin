@@ -11,13 +11,27 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Button from '@/components/button';
+import { getPartners } from '@/lib/backend-api';
+
+interface PartnerPreview {
+    id: number;
+    name: string;
+    description: string;
+    image?: string;
+}
+
+const fallbackPartners: PartnerPreview[] = [
+    { id: 1, name: 'MedTech Solutions', description: 'Поставщик медицинского оборудования', image: '/partners/partner2.png' },
+    { id: 2, name: 'BioMed Innovations', description: 'Инновационные биомедицинские технологии', image: '/partners/partner2.png' },
+    { id: 3, name: 'HealthCare Pro', description: 'Поставщик расходных материалов', image: '/partners/partner2.png' },
+];
 
 export default function Partners() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.3 });
     const [isClient, setIsClient] = useState(false);
+    const [partners, setPartners] = useState<PartnerPreview[]>(fallbackPartners);
 
     const router = useRouter();
 
@@ -25,16 +39,27 @@ export default function Partners() {
         setIsClient(true);
     }, []);
 
-    const partners = [
-        { id: 1, name: 'MedTech Solutions', description: 'Производитель медицинского оборудования' },
-        { id: 2, name: 'BioMed Innovations', description: 'Инновационные биомедицинские технологии' },
-        { id: 3, name: 'HealthCare Pro', description: 'Поставщик расходных материалов' },
-        { id: 4, name: 'Surgical Instruments Co.', description: 'Производитель хирургических инструментов' },
-        { id: 5, name: 'LabTech Systems', description: 'Лабораторное оборудование' },
-        { id: 6, name: 'MediSupplies Global', description: 'Международный поставщик' },
-        { id: 7, name: 'PharmaTech', description: 'Фармацевтическое оборудование' },
-        { id: 8, name: 'MediSoft', description: 'Медицинское программное обеспечение' },
-    ];
+    useEffect(() => {
+        void (async () => {
+            try {
+                const data = await getPartners();
+                if (data.length === 0) {
+                    return;
+                }
+
+                setPartners(
+                    data.map((partner) => ({
+                        id: partner.id,
+                        name: partner.name,
+                        description: partner.description,
+                        image: partner.image || '/partners/partner2.png',
+                    })),
+                );
+            } catch {
+                setPartners(fallbackPartners);
+            }
+        })();
+    }, []);
 
     const floatingElements = isClient ? [...Array(3)].map((_, i) => ({
         size: 20 + i * 10,
@@ -155,12 +180,11 @@ export default function Partners() {
                                     {/* Логотип */}
                                     <div className="w-38 h-38 rounded-full bg-linear-to-br from-[#FFF0EC] to-white mb-6 flex items-center justify-center shadow-inner group-hover:from-[#FFE5E0] transition-all duration-300 mt-2">
                                         <div className="w-32 h-32 bg-linear-to-br from-[#B72B3A]/10 to-[#FF6B6B]/10 rounded-full flex items-center justify-center text-xl font-bold text-[#B72B3A]">
-                                            <Image
-                                                src='/partners/partner2.png'
-                                                width={1000}
-                                                height={1000}
+                                            <img
+                                                src={partner.image || '/partners/partner2.png'}
                                                 loading="lazy"
-                                                className='w-full object-contain px-3' alt='partner'
+                                                className="w-full object-contain px-3"
+                                                alt={partner.name}
                                             />
                                         </div>
                                     </div>
@@ -255,3 +279,4 @@ export default function Partners() {
         </div>
     )
 }
+

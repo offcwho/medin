@@ -2,20 +2,46 @@
 
 import Container from "@/components/container"
 import { AboutList } from "@/entities/about"
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
+import { motion, useInView } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { getAboutEntries } from "@/lib/backend-api"
+
+const fallbackParagraphs = [
+    'Мы — команда опытных специалистов, которая помогает компаниям расти за счет современных цифровых решений.',
+    'Наш подход основан на глубоком анализе бизнес-задач и на практике: мы делаем продукты, которые помогают в реальной работе.',
+    'С 2013 года мы развиваем долгосрочные партнерства и поддерживаем проекты на всех этапах.',
+];
 
 export default function About() {
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true, amount: 0.3 })
     const [isClient, setIsClient] = useState(false)
+    const [paragraphs, setParagraphs] = useState<string[]>(fallbackParagraphs);
 
     useEffect(() => {
         setIsClient(true)
     }, [])
 
-    // Плавающие элементы - только на клиенте
+    useEffect(() => {
+        void (async () => {
+            try {
+                const entries = await getAboutEntries();
+                if (entries.length === 0) {
+                    return;
+                }
+
+                const latestDescription = entries[0]?.description?.trim();
+                if (!latestDescription) {
+                    return;
+                }
+
+                setParagraphs([latestDescription, ...fallbackParagraphs.slice(1)]);
+            } catch {
+                setParagraphs(fallbackParagraphs);
+            }
+        })();
+    }, []);
+
     const floatingElements = isClient ? [...Array(4)].map((_, i) => ({
         width: 8 + i * 2,
         height: 8 + i * 2,
@@ -28,9 +54,8 @@ export default function About() {
     })) : []
 
     return (
-        <div className="bg-white overflow-hidden">
-            <Container className="flex flex-col lg:flex-row gap-8 lg:gap-12 py-14 lg:py-20">
-                {/* Левая часть - текст */}
+        <div className="overflow-hidden bg-white">
+            <Container className="flex flex-col gap-8 py-14 lg:flex-row lg:gap-12 lg:py-20">
                 <motion.div
                     ref={ref}
                     initial={{ opacity: 0, x: -50 }}
@@ -42,58 +67,50 @@ export default function About() {
                         initial={{ opacity: 0, width: 0 }}
                         animate={isInView ? { opacity: 1, width: 60 } : { opacity: 0, width: 0 }}
                         transition={{ delay: 0.2, duration: 0.8 }}
-                        className="h-1 bg-linear-to-r from-[#b72b3a] to-transparent mb-6 rounded-full"
+                        className="mb-6 h-1 rounded-full bg-linear-to-r from-[#b72b3a] to-transparent"
                     />
 
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                         transition={{ delay: 0.1, duration: 0.5 }}
-                        className="text-4xl lg:text-5xl mb-6 lg:mb-8 font-bold text-gray-900 select-none"
+                        className="mb-6 select-none text-4xl font-bold text-gray-900 lg:mb-8 lg:text-5xl"
                     >
                         О нас
                     </motion.h2>
 
                     <div className="space-y-4">
-                        {[`***Test***`,
-                            `Мы — команда опытных разработчиков, дизайнеров и стратегов, которые превращают сложные задачи в элегантные цифровые решения. С 2013 года мы помогаем компаниям укреплять позиции на рынке через инновационные технологии, удобные интерфейсы и продуманную архитектуру.`,
-                            `Наш подход основан на глубоком анализе потребностей бизнеса и пользователей. Мы не просто пишем код — мы создаем инструменты, которые увеличивают продажи, оптимизируют процессы и повышают лояльность клиентов.`]
-                            .map((text, index) => (
-                                <motion.p
-                                    key={index}
-                                    initial={{ opacity: 0, y: 15 }}
-                                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-                                    transition={{ delay: 0.3 + index * 0.15, duration: 0.5 }}
-                                    className="text-lg lg:text-xl text-gray-700 leading-relaxed"
-                                >
-                                    {text}
-                                </motion.p>
-                            ))}
+                        {paragraphs.map((text, index) => (
+                            <motion.p
+                                key={index}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+                                transition={{ delay: 0.3 + index * 0.15, duration: 0.5 }}
+                                className="text-lg leading-relaxed text-gray-700 lg:text-xl"
+                            >
+                                {text}
+                            </motion.p>
+                        ))}
                     </div>
 
                     <motion.div
                         initial={{ opacity: 0, scale: 0 }}
                         animate={isInView ? { opacity: 0.1, scale: 1 } : { opacity: 0, scale: 0 }}
                         transition={{ delay: 0.8, duration: 1 }}
-                        className="absolute -left-10 top-1/2 w-40 h-40 rounded-full bg-linear-to-r from-[#b72b3a]/10 to-transparent blur-2xl -z-10"
+                        className="absolute -left-10 top-1/2 -z-10 h-40 w-40 rounded-full bg-linear-to-r from-[#b72b3a]/10 to-transparent blur-2xl"
                     />
                 </motion.div>
 
-                {/* Правая часть - цифры */}
-                <AboutList
-                    isInView={isInView}
-                />
+                <AboutList isInView={isInView} />
             </Container>
 
-            {/* Дополнительные декоративные элементы */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 0.05 } : { opacity: 0 }}
                 transition={{ delay: 1, duration: 1 }}
-                className="absolute right-0 bottom-0 w-64 h-64 rounded-full bg-linear-to-tl from-[#b72b3a] to-transparent blur-3xl -z-10"
+                className="absolute bottom-0 right-0 -z-10 h-64 w-64 rounded-full bg-linear-to-tl from-[#b72b3a] to-transparent blur-3xl"
             />
 
-            {/* Плавающие элементы для всей секции - только на клиенте */}
             {floatingElements.map((element, i) => (
                 <motion.div
                     key={i}
@@ -115,7 +132,7 @@ export default function About() {
                         delay: i * 0.5,
                         times: [0, 0.5, 1]
                     }}
-                    className={`absolute ${element.bgClass} rounded-full -z-10`}
+                    className={`absolute -z-10 rounded-full ${element.bgClass}`}
                     style={{
                         width: `${element.width}px`,
                         height: `${element.height}px`,

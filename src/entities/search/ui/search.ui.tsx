@@ -1,14 +1,16 @@
-import { partners } from "@/entities/partners/ui/partners-page.ui";
+'use client'
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ChevronRight } from "lucide-react";
-import Image from "next/image";
 import { useState, useMemo, useEffect, useRef } from "react";
+import { getPartners, PartnerModel } from "@/lib/backend-api";
 
 export const SearchUi = () => {
     const [searchValue, setSearchValue] = useState("");
     const [searchFocus, setSearchFocus] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [mounted, setMounted] = useState(false);
+    const [partners, setPartners] = useState<PartnerModel[]>([]);
 
     const searchRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +20,17 @@ export const SearchUi = () => {
     useEffect(() => {
         setMounted(true);
 
+    }, []);
+
+    useEffect(() => {
+        void (async () => {
+            try {
+                const data = await getPartners();
+                setPartners(data);
+            } catch {
+                setPartners([]);
+            }
+        })();
     }, []);
 
     // Фильтрация партнеров
@@ -44,7 +57,7 @@ export const SearchUi = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleSelectPartner = (partner: typeof partners[0]) => {
+    const handleSelectPartner = (partner: PartnerModel) => {
         setSearchValue(partner.name);
         setSearchFocus(false);
         setSelectedIndex(-1);
@@ -240,12 +253,11 @@ export const SearchUi = () => {
                                             <div className="flex items-center gap-3">
                                                 <div className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
                                                     {partner.image ? (
-                                                        <Image
+                                                        <img
                                                             src={partner.image}
                                                             alt={partner.name}
-                                                            width={600}
-                                                            height={600}
-                                                            className="w-full h-full object-cover rounded-lg"
+                                                            className="h-full w-full rounded-lg object-cover"
+                                                            loading="lazy"
                                                         />
                                                     ) : (
                                                         <span className="text-[#B72B3A] font-bold">

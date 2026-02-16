@@ -1,9 +1,8 @@
 import localFont from 'next/font/local';
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import Modals from "@/components/modals";
 import Provider from "@/components/provider";
+import SiteLayoutShell from "@/components/site-layout-shell";
 
 const font = localFont({
   src: '../../public/fonts/SNPro.woff2',
@@ -39,20 +38,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider>
-        <body
-          className={`${font.variable} antialiased`}
-        >
+      <body
+        className={`${font.variable} antialiased`}
+      >
+        <Provider>
           <div className="">
-            <Header />
-            <main>
-              {children}
-            </main>
-            <Footer />
+            <SiteLayoutShell>{children}</SiteLayoutShell>
           </div>
           <Modals />
-        </body>
-      </Provider>
+        </Provider>
+      </body>
     </html>
   );
 }
