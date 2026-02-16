@@ -54,7 +54,7 @@ export interface CreateAboutPayload {
     description: string;
 }
 
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:9000').replace(/\/+$/, '');
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'https://medin-backend.onrender.com').replace(/\/+$/, '');
 
 async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${path}`, {
