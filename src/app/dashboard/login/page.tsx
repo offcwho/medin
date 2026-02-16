@@ -13,7 +13,7 @@ export default function LoginPage() {
     const [error, setError] = useState('');
     const router = useRouter();
     const searchParams = useSearchParams();
-    const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:9000').replace(/\/+$/, '');
+    const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL ?? 'https://medin-backend.onrender.com').replace(/\/+$/, '');
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
